@@ -4,10 +4,11 @@ import Header from "../components/header/Header"
 const Root = () => {
   return (
     <div className="wrapper">
-      <Header />
-      <Outlet />
+      <div className="container">
+        <Header />
+        <Outlet />
+      </div>
     </div>
-
   )
 }
 
