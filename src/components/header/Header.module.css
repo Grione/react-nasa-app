@@ -1,0 +1,33 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.slogan {
+  font-family: "Open Sans", sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.nav-link {
+  color: #E0E0E0;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.nav-link:hover {
+  color: #BB86FC;
+}
+
+.nav-link.active {
+  color: #BB86FC;
+}
+
+.nav ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
