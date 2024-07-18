@@ -13,7 +13,7 @@ const ImagesList = ({ images }: ImagesListProps) => {
         return (
           <li className={classes['image-item']} key={image.title}>
             <img src={image.url} alt={image.title} />
-            <ImageInfo title={image.title} />
+            <ImageInfo title={image.title} media={image} />
           </li>
         )
       })}
