@@ -1,10 +1,13 @@
 const express = require('express');
 const fs = require('fs');
+const cors = require('cors');
+
 const app = express();
 
 const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
+app.use(cors());
 
 const DATA_FILE = 'data.json';
 
@@ -33,7 +36,7 @@ app.get('/api/data', (req, res) => {
 app.post('/api/data', (req, res) => {
   try {
     const newData = req.body;
-    if (!newData || typeof newData.content !== 'string') {
+    if (!newData || typeof newData !== 'object') {
       return res.status(400).json({ message: 'Invalid data format' });
     }
     const dataStore = readDataFromFile();
