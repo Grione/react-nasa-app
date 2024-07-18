@@ -10,11 +10,11 @@ interface FetchPicturesParams {
   count?: number;
 }
 
-export async function fetchPictures({ signal, count }: FetchPicturesParams):Promise<MediaResponse> {
+export async function fetchPictures({ signal, count }: FetchPicturesParams): Promise<MediaResponse> {
 
   let url = `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`;
 
-  if(count) {
+  if (count) {
     url += `&count=${count}`
   }
 
@@ -47,3 +47,22 @@ export const fetchPicturesArray = async ({ signal, count }: FetchPicturesParams)
   }
   return result;
 };
+
+export async function addFavorite(object: Media) {
+  const response = await fetch('http://localhost:3001/api/data', {
+    method: 'POST',
+    body: JSON.stringify(object),
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+
+  if (!response.ok) {
+    const error = new Error('An error occurred while creating the event');
+    //error.code = response.status;
+    //error.info = await response.json();
+    throw error;
+  }
+  
+  return await response.json();
+}
