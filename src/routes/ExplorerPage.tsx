@@ -5,6 +5,7 @@ import ImagesList from "../components/ImagesList/ImagesList";
 
 const ExplorerPage = () => {
   const COUNT_OF_PICTURES = 9;
+  
   const { data, isLoading, isError } = useQuery<Media[], Error>({
     queryKey: ['pictures'],
     queryFn: ({ signal }) => fetchPicturesArray({ signal, count: COUNT_OF_PICTURES }),

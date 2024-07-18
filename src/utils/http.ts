@@ -59,10 +59,25 @@ export async function addFavorite(object: Media) {
 
   if (!response.ok) {
     const error = new Error('An error occurred while creating the event');
-    //error.code = response.status;
-    //error.info = await response.json();
     throw error;
   }
-  
+
   return await response.json();
+}
+
+export async function fetchFavorite(): Promise<Media[]> {
+
+  let url = `http://localhost:3001/api/data`;
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    const error = new Error('An error occurred while fetching the photos');
+
+    throw error;
+  }
+
+  const result = await response.json();
+
+  return result;
 }

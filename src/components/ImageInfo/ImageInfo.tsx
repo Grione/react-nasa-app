@@ -1,26 +1,38 @@
 import { useMutation } from '@tanstack/react-query';
-import classes from './ImageInfo.module.css';
+
+import { addFavorite, queryClient } from '../../utils/http';
+import StarButton from '../UI/StarButton';
+
 import { Media } from '../../types/types';
-import { addFavorite } from '../../utils/http';
+import classes from './ImageInfo.module.css';
 interface ImageWrapperProps {
   title: string;
   media: Media;
+  isFavorite: boolean;
 }
 
-const ImageInfo = ({ title, media }: ImageWrapperProps) => {
+const ImageInfo = ({ title, media, isFavorite }: ImageWrapperProps) => {
   const { mutate } = useMutation({
-    mutationFn: addFavorite
+    mutationFn: addFavorite,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['favorites']
+      });
+    }
   })
 
   function sendDataHandler() {
-    console.log(media)
     mutate(media)
+  }
+
+  function deleteDataHandler() {
+    console.log('delete');
   }
 
   return (
     <div className={classes['info']}>
       <span className={classes.title}>{title}</span>
-      <button onClick={sendDataHandler}>Send</button>
+      <StarButton isFavorite={isFavorite} handlerClick={isFavorite ? deleteDataHandler : sendDataHandler} />
     </div>
   )
 }
