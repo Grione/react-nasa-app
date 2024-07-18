@@ -1,15 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchPictures } from "../utils/http";
+import { fetchSinglePicture } from "../utils/http";
 import IFrameVideo from "../components/UI/IFrameVideo";
+import { Media } from "../types/types";
 
 const now = new Date();
 const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
 const staleTime = endOfDay.getTime() - now.getTime();
 
 const MainPage = () => {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery<Media, Error>({
     queryKey: ['main-photo'],
-    queryFn: ({ signal }) => fetchPictures({ signal }),
+    queryFn: ({ signal }) => fetchSinglePicture({ signal }),
     staleTime: staleTime,
   });
 

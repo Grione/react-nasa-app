@@ -1,4 +1,4 @@
-export type Media = {
+export interface Media {
   copyright: string;
   date: string;
   explanation: string;
@@ -7,3 +7,5 @@ export type Media = {
   title: string;
   url: string;
 }
+
+export type MediaResponse = Media | Media[];
