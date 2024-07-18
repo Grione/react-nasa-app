@@ -9,6 +9,10 @@ body {
   color: #E0E0E0;
 }
 
+img {
+  max-width: 100%;
+}
+
 .container {
   background-color: #1E1E1E;
   padding: 20px;
