@@ -11,6 +11,12 @@ const Header = () => {
           <li><NavLink to="/"
             className={({ isActive }) => isActive ? `${classes['active']} ${classes['nav-link']}` : classes['nav-link']}>Main</NavLink></li>
           <li><NavLink to="/explorer" className={({ isActive }) => isActive ? `${classes['active']} ${classes['nav-link']}` : classes['nav-link']}>Start explorer</NavLink></li>
+          <li>
+            <NavLink to="/favorites"
+              className={({ isActive }) => isActive ? `${classes['active']} ${classes['nav-link']}` : classes['nav-link']}>
+              Favorites
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </header>
