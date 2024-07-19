@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Media } from "../../types/types";
-import ImageInfo from "../ImageInfo/ImageInfo";
 import classes from './ImagesList.module.css';
 import { fetchFavorite } from "../../utils/http";
+import ImageWrapper from "../ImageWrapper/ImageWrapper";
 
 interface ImagesListProps {
   images: Media[];
@@ -28,8 +28,7 @@ const ImagesList = ({ images }: ImagesListProps) => {
 
         return (
           <li className={classes['image-item']} key={image.title}>
-            <img src={url} alt={image.title} />
-            <ImageInfo title={image.title} media={image} isFavorite={isFavorite} url={url}/>
+            <ImageWrapper data={image} isFavorite={isFavorite} />
           </li>
         )
       })}
