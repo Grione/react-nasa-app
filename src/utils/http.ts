@@ -81,3 +81,21 @@ export async function fetchFavorite(): Promise<Media[]> {
 
   return result;
 }
+
+export async function deleteFavorite({ url }: { url: string }) {
+  const response = await fetch(`http://localhost:3001/api/data`, {
+    method: 'DELETE',
+    body: JSON.stringify({ url }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const error = new Error('An error occurred while deleting the event');
+
+    throw error;
+  }
+
+  return response.json();
+}

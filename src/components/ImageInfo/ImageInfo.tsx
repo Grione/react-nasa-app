@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { addFavorite, queryClient } from '../../utils/http';
+import { addFavorite, deleteFavorite, queryClient } from '../../utils/http';
 import StarButton from '../UI/StarButton';
 
 import { Media } from '../../types/types';
@@ -9,10 +9,12 @@ interface ImageWrapperProps {
   title: string;
   media: Media;
   isFavorite: boolean;
+  url: string;
 }
 
-const ImageInfo = ({ title, media, isFavorite }: ImageWrapperProps) => {
-  const { mutate } = useMutation({
+const ImageInfo = ({ title, media, isFavorite, url }: ImageWrapperProps) => {
+
+  const { mutate: addMutate } = useMutation({
     mutationFn: addFavorite,
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -21,12 +23,22 @@ const ImageInfo = ({ title, media, isFavorite }: ImageWrapperProps) => {
     }
   })
 
+  const { mutate: deleteMutate } = useMutation({
+    mutationFn: deleteFavorite,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['favorites']
+      });
+    }
+  })
+
+
   function sendDataHandler() {
-    mutate(media)
+    addMutate(media);
   }
 
   function deleteDataHandler() {
-    console.log('delete');
+    deleteMutate({ url: url });
   }
 
   return (

@@ -15,8 +15,6 @@ const ImagesList = ({ images }: ImagesListProps) => {
     queryFn: () => fetchFavorite(),
   });
 
-  console.log(data);
-
   return (
     <ul className={classes['images-list']}>
       {images.map((image) => {
@@ -31,7 +29,7 @@ const ImagesList = ({ images }: ImagesListProps) => {
         return (
           <li className={classes['image-item']} key={image.title}>
             <img src={url} alt={image.title} />
-            <ImageInfo title={image.title} media={image} isFavorite={isFavorite} />
+            <ImageInfo title={image.title} media={image} isFavorite={isFavorite} url={url}/>
           </li>
         )
       })}

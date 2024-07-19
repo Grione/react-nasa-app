@@ -1,5 +1,7 @@
-const express = require('express');
 const fs = require('fs');
+
+const express = require('express');
+
 const cors = require('cors');
 
 const app = express();
@@ -44,6 +46,29 @@ app.post('/api/data', (req, res) => {
     writeDataToFile(dataStore);
     res.status(201).json(newData);
   } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+app.delete('/api/data', (req, res) => {
+  try {
+    const { url } = req.body;
+
+    const medias = readDataFromFile();
+
+    const mediaIndex = medias.findIndex((media) => media.url === url);
+
+    if (mediaIndex === -1) {
+      return res.status(404).json({ message: 'Media not found' });
+    }
+
+    medias.splice(mediaIndex, 1);
+
+    writeDataToFile(medias);
+
+    res.json({ message: 'Media deleted' });
+  } catch (error) {
+    console.error('Error deleting media:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
