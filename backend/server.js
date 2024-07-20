@@ -1,12 +1,12 @@
 const fs = require('fs');
-
 const express = require('express');
-
 const cors = require('cors');
-
 const app = express();
 
 const PORT = process.env.PORT || 3001;
+
+const authRoutes = require('./routes/auth');
+const { authenticateToken } = require('./middleware');
 
 app.use(express.json());
 app.use(cors());
@@ -26,7 +26,9 @@ const writeDataToFile = (data) => {
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 };
 
-app.get('/api/data', (req, res) => {
+app.use('/api', authRoutes);
+
+app.get('/api/data', authenticateToken, (req, res) => {
   try {
     const dataStore = readDataFromFile();
     res.json(dataStore);
@@ -35,7 +37,7 @@ app.get('/api/data', (req, res) => {
   }
 });
 
-app.post('/api/data', (req, res) => {
+app.post('/api/data', authenticateToken, (req, res) => {
   try {
     const newData = req.body;
     if (!newData || typeof newData !== 'object') {
@@ -50,7 +52,7 @@ app.post('/api/data', (req, res) => {
   }
 });
 
-app.delete('/api/data', (req, res) => {
+app.delete('/api/data', authenticateToken, (req, res) => {
   try {
     const { url } = req.body;
 
@@ -72,7 +74,6 @@ app.delete('/api/data', (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
