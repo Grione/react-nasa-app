@@ -1,7 +1,14 @@
 import { QueryClient } from '@tanstack/react-query';
 import { MediaResponse, Media } from '../types/types';
+import { getAuthToken } from './auth';
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    }
+  }
+});
 
 const API_KEY = 'tWMXlOEOmnYg0gRg42Sdybx1aD9ylBnzJzmhvrPc';
 
@@ -49,11 +56,14 @@ export const fetchPicturesArray = async ({ signal, count }: FetchPicturesParams)
 };
 
 export async function addFavorite(object: Media) {
+  const token = getAuthToken();
+
   const response = await fetch('http://localhost:3001/api/data', {
     method: 'POST',
     body: JSON.stringify(object),
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
     }
   });
 
@@ -68,8 +78,13 @@ export async function addFavorite(object: Media) {
 export async function fetchFavorite(): Promise<Media[]> {
 
   let url = `http://localhost:3001/api/data`;
+  const token = getAuthToken();
 
-  const response = await fetch(url);
+  const response = await fetch(url, {
+    headers: {
+      'Authorization': 'Bearer ' + token,
+    }
+  });
 
   if (!response.ok) {
     const error = new Error('An error occurred while fetching the photos');
@@ -83,11 +98,14 @@ export async function fetchFavorite(): Promise<Media[]> {
 }
 
 export async function deleteFavorite({ url }: { url: string }) {
+  const token = getAuthToken();
+
   const response = await fetch(`http://localhost:3001/api/data`, {
     method: 'DELETE',
     body: JSON.stringify({ url }),
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
     },
   });
 
@@ -98,4 +116,43 @@ export async function deleteFavorite({ url }: { url: string }) {
   }
 
   return response.json();
+}
+
+interface AuthenticationProps {
+  dataObject: {
+    email: string;
+    password: string;
+  };
+  mode: string;
+}
+
+
+export async function authentication({ dataObject, mode }: AuthenticationProps) {
+
+  if (mode !== 'login' && mode !== 'signup') {
+    throw new Error('Unsupported mode');
+  }
+
+  const response = await fetch(`http://localhost:3001/api/${mode}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dataObject)
+  });
+
+  if (response.status === 400) {
+    return response;
+  }
+
+  if (!response.ok) {
+    throw new Error('Could not auth user.');
+  }
+
+  const resData = await response.json();
+  const token = resData.token;
+
+  localStorage.setItem('token', token);
+
+  return response;
 }

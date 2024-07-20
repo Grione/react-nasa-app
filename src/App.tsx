@@ -6,6 +6,7 @@ import MainPage from './routes/MainPage';
 import ExplorerPage from './routes/ExplorerPage';
 import Root from './routes/Root';
 import FavoritePage from './routes/FavoritesPage';
+import AuthPage from './routes/AuthPage';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: '/explorer',
         element: <ExplorerPage />
+      },
+      {
+        path: '/auth',
+        element: <AuthPage />
       },
       {
         path: '/favorites',
