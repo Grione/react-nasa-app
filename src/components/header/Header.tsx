@@ -17,6 +17,12 @@ const Header = () => {
               Favorites
             </NavLink>
           </li>
+          <li>
+            <NavLink to="/auth?mode=login"
+              className={({ isActive }) => isActive ? `${classes['active']} ${classes['nav-link']}` : classes['nav-link']}>
+              Auth
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </header>
