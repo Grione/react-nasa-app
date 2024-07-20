@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import classes from './Header.module.css';
+import LogoutButton from "../LogoutButton/LogoutButton";
 
 const Header = () => {
 
@@ -22,6 +23,9 @@ const Header = () => {
               className={({ isActive }) => isActive ? `${classes['active']} ${classes['nav-link']}` : classes['nav-link']}>
               Auth
             </NavLink>
+          </li>
+          <li>
+            <LogoutButton />
           </li>
         </ul>
       </nav>
