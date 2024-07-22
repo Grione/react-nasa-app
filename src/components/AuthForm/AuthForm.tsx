@@ -1,13 +1,21 @@
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { authentication } from "../../utils/http";
+import { useUser } from "../../store/UserContext";
 
 const AuthForm = () => {
   const [searchParams] = useSearchParams();
   const isLogin = searchParams.get('mode') === 'login';
+  const { loginUser } = useUser();
+
+  const navigate = useNavigate()
 
   const { mutate } = useMutation({
-    mutationFn: authentication
+    mutationFn: authentication,
+    onSuccess: () => {
+      loginUser();
+      navigate('/favorites');
+    }
   })
 
   function onSubmitHandler(event: React.FormEvent<HTMLFormElement>) {
@@ -21,8 +29,6 @@ const AuthForm = () => {
       email: formData.get('email') as string,
       password: formData.get('password') as string,
     };
-
-    console.log(dataObject, mode);
 
     mutate({ dataObject, mode })
 

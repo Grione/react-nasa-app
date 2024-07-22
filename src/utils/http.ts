@@ -156,8 +156,3 @@ export async function authentication({ dataObject, mode }: AuthenticationProps) 
 
   return response;
 }
-
-export async function logout() {
-  localStorage.removeItem('token');
-  return { message: 'User logged out' };
-}

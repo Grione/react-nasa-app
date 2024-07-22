@@ -1,23 +1,15 @@
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
-import { logout } from "../../utils/http";
+import { useUser } from "../../store/UserContext";
 
 const LogoutButton = () => {
 
   const navigate = useNavigate();
+  const { logoutUser } = useUser();
 
-  const { mutate } = useMutation({
-    mutationFn: logout,
-    onSuccess: () => {
-      navigate('/');
-    },
-    onError: (error) => {
-      console.log('Logout failed', error);
-    }
-  });
 
   function logoutHandler() {
-    mutate()
+    logoutUser();
+    navigate('/');
   }
 
   return <button onClick={logoutHandler}>Logout</button>

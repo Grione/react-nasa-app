@@ -7,6 +7,7 @@ import ExplorerPage from './routes/ExplorerPage';
 import Root from './routes/Root';
 import FavoritePage from './routes/FavoritesPage';
 import AuthPage from './routes/AuthPage';
+import { UserContextProvider } from './store/UserContext';
 
 const router = createBrowserRouter([
   {
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
 ])
 
 function App() {
-  return <QueryClientProvider client={queryClient}><RouterProvider router={router} /></QueryClientProvider>;
+  return <QueryClientProvider client={queryClient}><UserContextProvider><RouterProvider router={router} /></UserContextProvider></QueryClientProvider>;
 }
 
 export default App;
