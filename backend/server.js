@@ -44,7 +44,8 @@ app.post('/api/data', authenticateToken, (req, res) => {
       return res.status(400).json({ message: 'Invalid data format' });
     }
     const dataStore = readDataFromFile();
-    dataStore.push(newData);
+
+    dataStore.unshift(newData);
     writeDataToFile(dataStore);
     res.status(201).json(newData);
   } catch (error) {
