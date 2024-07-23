@@ -20,6 +20,7 @@ export function UserContextProvider({ children }: { children: React.ReactNode })
 
   function logoutUser() {
     localStorage.removeItem('token');
+    localStorage.removeItem('expiration');
     setIsUserAuth(false);
   }
 

@@ -1,10 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
-
+import { useNavigate } from 'react-router-dom';
 import { addFavorite, deleteFavorite, queryClient } from '../../utils/http';
 import StarButton from '../UI/StarButton';
 
 import { Media } from '../../types/types';
 import classes from './ImageInfo.module.css';
+import { useUser } from '../../store/UserContext';
 interface ImageWrapperProps {
   title: string;
   media: Media;
@@ -13,6 +14,9 @@ interface ImageWrapperProps {
 }
 
 const ImageInfo = ({ title, media, isFavorite, url }: ImageWrapperProps) => {
+
+  const { isUserAuth } = useUser();
+  const navigate = useNavigate();
 
   const { mutate: addMutate } = useMutation({
     mutationFn: addFavorite,
@@ -30,21 +34,25 @@ const ImageInfo = ({ title, media, isFavorite, url }: ImageWrapperProps) => {
         queryKey: ['favorites']
       });
     }
-  })
+  });
 
+  function favoriteActionHandler() {
 
-  function sendDataHandler() {
-    addMutate(media);
-  }
-
-  function deleteDataHandler() {
-    deleteMutate({ url: url });
+    if (!isUserAuth) {
+      navigate('/auth?mode=login');
+      return;
+    }
+    if (isFavorite) {
+      deleteMutate({ url: url });
+    } else {
+      addMutate(media);
+    }
   }
 
   return (
     <div className={classes['info']}>
       <span className={classes.title}>{title}</span>
-      <StarButton isFavorite={isFavorite} handlerClick={isFavorite ? deleteDataHandler : sendDataHandler} />
+      <StarButton isFavorite={isFavorite} handlerClick={favoriteActionHandler} />
     </div>
   )
 }
