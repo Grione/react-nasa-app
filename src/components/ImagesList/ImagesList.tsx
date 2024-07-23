@@ -3,6 +3,7 @@ import { Media } from "../../types/types";
 import classes from './ImagesList.module.css';
 import { fetchFavorite } from "../../utils/http";
 import ImageWrapper from "../ImageWrapper/ImageWrapper";
+import { useUser } from "../../store/UserContext";
 
 interface ImagesListProps {
   images: Media[];
@@ -10,9 +11,12 @@ interface ImagesListProps {
 
 const ImagesList = ({ images }: ImagesListProps) => {
 
+  const { isUserAuth } = useUser()
+
   const { data } = useQuery({
     queryKey: ['favorites'],
     queryFn: () => fetchFavorite(),
+    enabled: isUserAuth
   });
 
   return (

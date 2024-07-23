@@ -5,12 +5,15 @@ import { Media } from "../types/types";
 import ImageWrapper from "../components/ImageWrapper/ImageWrapper";
 import classes from './MainPage.module.css'
 import MainImageContent from "../components/MainImageContent/MainImageContent";
+import { useUser } from "../store/UserContext";
 
 const now = new Date();
 const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
 const staleTime = endOfDay.getTime() - now.getTime();
 
 const MainPage = () => {
+  const { isUserAuth } = useUser()
+
   const { data, isLoading, isError } = useQuery<Media, Error>({
     queryKey: ['main-photo'],
     queryFn: ({ signal }) => fetchSinglePicture({ signal }),
@@ -20,6 +23,7 @@ const MainPage = () => {
   const { data: favoriteImages } = useQuery<Media[], Error>({
     queryKey: ['favorites'],
     queryFn: () => fetchFavorite(),
+    enabled: isUserAuth
   });
 
   let content;

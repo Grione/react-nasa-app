@@ -10,11 +10,12 @@ const ExplorerPage = () => {
   const { data, isFetching, isError } = useQuery<Media[], Error>({
     queryKey: ['pictures'],
     queryFn: ({ signal }) => fetchPicturesArray({ signal, count: COUNT_OF_PICTURES }),
+    staleTime: 1000 * 60 * 5,
   });
 
   function getPhotosHandler() {
     queryClient.invalidateQueries({
-      queryKey: ['pictures']
+      queryKey: ['pictures'],
     });
   }
 
