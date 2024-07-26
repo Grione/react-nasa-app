@@ -142,7 +142,10 @@ export async function authentication({ dataObject, mode }: AuthenticationProps) 
   });
 
   if (response.status === 400) {
-    return response;
+    const responseData = await response.json();
+    const errorMessage = responseData.message || 'Error post data'; 
+
+    throw new Error(errorMessage); 
   }
 
   if (!response.ok) {

@@ -3,19 +3,24 @@ import { useMutation } from "@tanstack/react-query";
 import { authentication } from "../../utils/http";
 import { useUser } from "../../store/UserContext";
 import classes from './AuthForm.module.css';
+import { useState } from "react";
 
 const AuthForm = () => {
+  const [errorMessage, setErrorMessage] = useState('');
   const [searchParams] = useSearchParams();
   const isLogin = searchParams.get('mode') === 'login';
   const { loginUser } = useUser();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: authentication,
     onSuccess: () => {
       loginUser();
-      navigate('/favorites');
+      navigate('/');
+    },
+    onError: (error) => {
+      setErrorMessage(error.message || 'Error post data');
     }
   })
 
@@ -35,6 +40,10 @@ const AuthForm = () => {
 
   }
 
+  function resetErrorMessageHandler() {
+    setErrorMessage('');
+  }
+
   return (
     <>
       <form method="post" onSubmit={onSubmitHandler} className={classes.form}>
@@ -42,18 +51,20 @@ const AuthForm = () => {
         <div className={classes.wrapper}>
           <div className={classes.row}>
             <label htmlFor="email">Email</label>
-            <input type="email" id="email" name="email" className={classes.input} required />
+            <input onChange={resetErrorMessageHandler} type="email" id="email" name="email" className={classes.input} required />
           </div>
           <div className={classes.row}>
             <label htmlFor="passwod">Password</label>
-            <input type="password" id="passwod" className={classes.input} name="password" required />
+            <input onChange={resetErrorMessageHandler} type="password" id="passwod" className={classes.input} name="password" required />
           </div>
           <div className={`${classes.row} ${classes.action}`}>
-            <Link to={`?mode=${isLogin ? 'signup' : 'login'}`} className={classes.link}>{isLogin ? 'Create new user' : 'Login'}</Link>
-            <button className={classes.button}>Save</button>
+            <Link to={`?mode=${isLogin ? 'signup' : 'login'}`} onClick={resetErrorMessageHandler} className={classes.link}>{isLogin ? 'Create new user' : 'Login'}</Link>
+            <button className={classes.button} disabled={isPending}>Save</button>
+          </div>
+          <div className={classes.row}>
+            {errorMessage && <p>An error occurred: {errorMessage}</p>}
           </div>
         </div>
-
       </form>
     </>
   )
