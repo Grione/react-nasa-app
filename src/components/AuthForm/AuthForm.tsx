@@ -2,6 +2,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { authentication } from "../../utils/http";
 import { useUser } from "../../store/UserContext";
+import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
   const [searchParams] = useSearchParams();
@@ -36,20 +37,23 @@ const AuthForm = () => {
 
   return (
     <>
-      <form method="post" onSubmit={onSubmitHandler}>
+      <form method="post" onSubmit={onSubmitHandler} className={classes.form}>
         <h2>{isLogin ? 'Log in' : 'Create a new user'}</h2>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" name="email" required />
+        <div className={classes.wrapper}>
+          <div className={classes.row}>
+            <label htmlFor="email">Email</label>
+            <input type="email" id="email" name="email" className={classes.input} required />
+          </div>
+          <div className={classes.row}>
+            <label htmlFor="passwod">Password</label>
+            <input type="password" id="passwod" className={classes.input} name="password" required />
+          </div>
+          <div className={`${classes.row} ${classes.action}`}>
+            <Link to={`?mode=${isLogin ? 'signup' : 'login'}`} className={classes.link}>{isLogin ? 'Create new user' : 'Login'}</Link>
+            <button className={classes.button}>Save</button>
+          </div>
         </div>
-        <div>
-          <label htmlFor="passwod">Password</label>
-          <input type="password" id="passwod" name="password" required />
-        </div>
-        <div>
-          <Link to={`?mode=${isLogin ? 'signup' : 'login'}`}>{isLogin ? 'Create new user' : 'Login'}</Link>
-          <button>Save</button>
-        </div>
+
       </form>
     </>
   )
