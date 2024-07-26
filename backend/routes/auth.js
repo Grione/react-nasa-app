@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 const router = express.Router();
 
@@ -29,18 +30,19 @@ router.post('/signup', async (req, res) => {
     }
 
     const usersStore = readDataFromFile(USERS_FILE);
+
     const existingUser = usersStore.find(user => user.email === email);
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = { email, password: hashedPassword, role: 'user' };
+    const newUser = { id: uuidv4(), email, password: hashedPassword, role: 'user' };
     usersStore.push(newUser);
 
     writeDataToFile(USERS_FILE, usersStore);
 
-    const token = jwt.sign({ email: newUser.email, role: newUser.role }, SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ id: newUser.id, email: newUser.email, role: newUser.role }, SECRET_KEY, { expiresIn: '1h' });
 
     res.status(201).json({ message: 'User registered successfully', token });
 

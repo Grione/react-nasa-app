@@ -30,8 +30,11 @@ app.use('/api', authRoutes);
 
 app.get('/api/data', authenticateToken, (req, res) => {
   try {
+    const userId = req.user.id;
     const dataStore = readDataFromFile();
-    res.json(dataStore);
+
+    const userData = dataStore.filter((obj) => obj.userId === userId);
+    res.json(userData);
   } catch (error) {
     res.status(500).json({ message: 'Internal Server Error' });
   }
@@ -43,9 +46,13 @@ app.post('/api/data', authenticateToken, (req, res) => {
     if (!newData || typeof newData !== 'object') {
       return res.status(400).json({ message: 'Invalid data format' });
     }
+
+    const userId = req.user.id;
     const dataStore = readDataFromFile();
 
+    newData.userId = userId;
     dataStore.unshift(newData);
+
     writeDataToFile(dataStore);
     res.status(201).json(newData);
   } catch (error) {
@@ -56,10 +63,11 @@ app.post('/api/data', authenticateToken, (req, res) => {
 app.delete('/api/data', authenticateToken, (req, res) => {
   try {
     const { url } = req.body;
+    const userId = req.user.id;
 
     const medias = readDataFromFile();
 
-    const mediaIndex = medias.findIndex((media) => media.url === url);
+    const mediaIndex = medias.findIndex((media) => (media.url === url && media.userId === userId));
 
     if (mediaIndex === -1) {
       return res.status(404).json({ message: 'Media not found' });
