@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
@@ -6,7 +7,7 @@ const fs = require('fs');
 const router = express.Router();
 
 const USERS_FILE = 'users.json';
-const SECRET_KEY = 'your_secret_key';
+const SECRET_KEY = process.env.SECRET_KEY;
 
 const readDataFromFile = (file) => {
   try {
