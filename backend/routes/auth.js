@@ -7,7 +7,7 @@ const fs = require('fs');
 const router = express.Router();
 
 const USERS_FILE = 'users.json';
-const SECRET_KEY = process.env.SECRET_KEY;
+const SECRET_KEY = process.env.SEKRET_KEY;
 
 const readDataFromFile = (file) => {
   try {
