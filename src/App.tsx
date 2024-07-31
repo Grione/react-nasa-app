@@ -8,6 +8,7 @@ import Root from './routes/Root';
 import FavoritePage from './routes/FavoritesPage';
 import AuthPage from './routes/AuthPage';
 import { UserContextProvider } from './store/UserContext';
+import { ModalContextProvider } from './store/ModalContext';
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,15 @@ const router = createBrowserRouter([
 ])
 
 function App() {
-  return <QueryClientProvider client={queryClient}><UserContextProvider><RouterProvider router={router} /></UserContextProvider></QueryClientProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <UserContextProvider>
+        <ModalContextProvider>
+          <RouterProvider router={router} />
+        </ModalContextProvider>
+      </UserContextProvider>
+    </QueryClientProvider>
+  );
 }
 
 export default App;

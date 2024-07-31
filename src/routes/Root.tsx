@@ -3,6 +3,8 @@ import Header from "../components/header/Header"
 import { useEffect } from "react";
 import { getAuthToken, getTokenDuration } from "../utils/auth";
 import { useUser } from "../store/UserContext";
+import Modal from "../components/Modal/Modal";
+import { createPortal } from "react-dom";
 
 const Root = () => {
   const token = getAuthToken();
@@ -32,6 +34,7 @@ const Root = () => {
       <div className="container">
         <Header />
         <Outlet />
+        {createPortal(<Modal />, document.body)}
       </div>
     </div>
   )

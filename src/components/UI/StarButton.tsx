@@ -11,8 +11,13 @@ const StarButton = ({ isFavorite, handlerClick }: StarButtonProps) => {
 
   const iconSrc = isFavorite ? StarIconFill : StarIcon;
 
+  function onClickHandler(event: React.MouseEvent<HTMLButtonElement>) {
+    event.stopPropagation();
+    handlerClick();
+  }
+
   return (
-    <button className={classes.button} onClick={handlerClick}>
+    <button className={classes.button} onClick={onClickHandler}>
       <img src={iconSrc} alt='star' />
     </button>
   )
